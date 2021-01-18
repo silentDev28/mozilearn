@@ -19,8 +19,7 @@ if (isset($_POST['logout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-	
-<!-- Mirrored from codeminifier.com/learnup-1.1/learnup/dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Oct 2020 13:56:46 GMT -->
+
 <head>
 		<meta charset="utf-8" />
 		<meta name="author" content="www.frebsite.nl" />
@@ -58,7 +57,7 @@ if (isset($_POST['logout'])) {
 					<nav id="navigation" class="navigation navigation-landscape">
 						<div class="nav-header">
 							<a class="nav-brand" href="#">
-                                <a class="nav-brand fixed-logo" href="#"><img src="assets/img/mozisha-logo.png" class="logo" alt="" /></a>
+                            <a class="nav-brand fixed-logo" href="index.php"><img src="assets/img/logo-black.png" class="logo" alt="" /></a>
 
                             </a>
 							<div class="nav-toggle"></div>
@@ -795,5 +794,4 @@ if (isset($_POST['logout'])) {
 
 	</body>
 
-<!-- Mirrored from codeminifier.com/learnup-1.1/learnup/dashboard.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Oct 2020 13:56:48 GMT -->
 </html>

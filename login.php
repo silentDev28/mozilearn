@@ -25,8 +25,7 @@ if(isset($_POST['login'])){
 ?>
 <!DOCTYPE html>
 <html lang="en">
-	
-<!-- Mirrored from codeminifier.com/learnup-1.1/learnup/course-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Oct 2020 13:57:03 GMT -->
+
 <head>
 		<meta charset="utf-8" />
 		<meta name="author" content="www.frebsite.nl" />
@@ -64,7 +63,7 @@ if(isset($_POST['login'])){
 					<nav id="navigation" class="navigation navigation-landscape">
 						<div class="nav-header">
 							<a class="nav-brand" href="#">
-                                <img src="assets/img/mozisha-logo.png" class="logo" alt="" />
+                            <a class="nav-brand fixed-logo" href="index.php"><img src="assets/img/logo-black.png" class="logo" alt="" /></a>
 							</a>
 							<div class="nav-toggle"></div>
 						</div>
@@ -179,16 +178,16 @@ if(isset($_POST['login'])){
 			
 			<!-- ============================ Course Detail ================================== -->
 			<section class="bg-light">
-				<div class="container col-5"style="display:flex;justify-content: center">
+				<div class="container col-md-5 col-11"style="display:flex;justify-content: center">
                                     <div class="row">
-                                        <h6 style="width:100%;text-align: left;margin-bottom: 20px" class="col-12">Login to your Mozilearn Account!</h6>
+                                        <h6 style="width:100%;text-align: left;margin-bottom: 20px" class="col-12" >Login to your Mozilearn Account!</h6>
                                         <div class="col-12">
                                            
                                             <?php echo $message;?>
                                         </div>
                                         <form action="" method="post" class="col-12">
-                                            <input type="email" class="form-control col-8" style="margin-bottom: 20px" placeholder="Enter email" name="email"/>
-                                            <input type="password" class="form-control col-8" style="margin-bottom: 20px" placeholder="Enter password" name="password"/>
+                                            <input type="email" class="form-control col-md-8 col-12" style="margin-bottom: 20px" placeholder="Enter email" name="email"/>
+                                            <input type="password" class="form-control col-md-8 col-12" style="margin-bottom: 20px" placeholder="Enter password" name="password"/>
                                         <div class="col-12" style="text-align: left;padding:0px">
                                             <input type="submit"  value="Login" style="padding: 10px;border:none;color:#DD205D;cursor: pointer" name="login"/>
                                         </form>
@@ -430,5 +429,5 @@ if(isset($_POST['login'])){
 
 	</body>
 
-<!-- Mirrored from codeminifier.com/learnup-1.1/learnup/course-detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Oct 2020 13:57:03 GMT -->
+
 </html>

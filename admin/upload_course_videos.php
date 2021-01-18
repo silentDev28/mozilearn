@@ -17,60 +17,55 @@
 include 'conn.php';
 error_reporting(0);
 session_start();
-$message="";
-if(empty($_SESSION['email'])){
-    header("location:"."/admin/examples/login.php");
-}else{
-    $_SESSION['route_course_code']=$_GET['course_code'];
-    if(isset($_POST['start_new_step'])){
+$message = "";
+if (empty($_SESSION['email'])) {
+    header("location:" . "/admin/examples/login.php");
+} else {
+    $_SESSION['route_course_code'] = $_GET['course_code'];
+    if (isset($_POST['start_new_step'])) {
         unset($_SESSION['step_code']);
     }
-    if(isset($_POST['add_vidoes_btn'])){
-        if(empty($_POST['video_title'])){
-            $message="Please enter a file title";
-        }
-        else if(empty($_FILES['lesson_videos']['name'] )){
-            $message="Please enter a valid file to upload";
-        }
-        else{
+    if (isset($_POST['add_vidoes_btn'])) {
+        if (empty($_POST['video_title'])) {
+            $message = "Please enter a file title";
+        } else if (empty($_FILES['lesson_videos']['name'])) {
+            $message = "Please enter a valid file to upload";
+        } else {
 
-            $video_title=$_POST['video_title'];
-            $step_code=$_SESSION['step_code'];
-            $course_code=$_GET['course_code'];
-            $fetch_files=$conn->query("SELECT * FROM lesson_step WHERE course_code='$course_code' and step_code='$step_code'");
-            if($fetch_files->num_rows>1){
-                $message="This file has already been uploaded";
-            }
-            else{
-                $maxsize = 82837860*82837860*82837860; // 1GB
-
+            $video_title = $_POST['video_title'];
+            $step_code = $_SESSION['step_code'];
+            $course_code = $_GET['course_code'];
+            $fetch_files = $conn->query("SELECT * FROM lesson_step WHERE course_code='$course_code' and step_code='$step_code'");
+            if ($fetch_files->num_rows > 1) {
+                $message = "This file has already been uploaded";
+            } else {
+                $maxsize = 82837860 * 82837860 * 82837860; // 1GB
 
                 $name = $_FILES['lesson_videos']['name'];
                 $target_dir = "videos/";
                 $target_file = $target_dir . $_FILES['lesson_videos']["name"];
 
                 // Select file type
-                $videoFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+                $videoFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
                 // Valid file extensions
-                $extensions_arr = array("mp4","avi","3gp","mov","mpeg","pdf");
-
+                $extensions_arr = array("mp4", "avi", "3gp", "mov", "mpeg", "pdf");
 
                 // Check extension
-                if( in_array($videoFileType,$extensions_arr) ){
+                if (in_array($videoFileType, $extensions_arr)) {
 
                     // Check file size
-                    if(($_FILES['lesson_videos']['size'] >= $maxsize)) {
-                        $message= "File too large. File must be less than 200MB.";
-                    }else{
+                    if (($_FILES['lesson_videos']['size'] >= $maxsize)) {
+                        $message = "File too large. File must be less than 200MB.";
+                    } else {
                         // Upload
-                        if((move_uploaded_file($_FILES['lesson_videos']['tmp_name'],$target_file))){
+                        if ((move_uploaded_file($_FILES['lesson_videos']['tmp_name'], $target_file))) {
 
-                            $insert_videos=$conn->query("INSERT INTO lesson_vidoes(video_title,step_code,course_code,videos)VALUES('$video_title','$step_code','$course_code','$name')");
-                            if($insert_videos==TRUE){
-                                $message="File uploaded successful";
-                            }else{
-                                $message=$conn->error;
+                            $insert_videos = $conn->query("INSERT INTO lesson_vidoes(video_title,step_code,course_code,videos)VALUES('$video_title','$step_code','$course_code','$name')");
+                            if ($insert_videos == true) {
+                                $message = "File uploaded successful";
+                            } else {
+                                $message = $conn->error;
                             }
                         }
                     }
@@ -98,6 +93,7 @@ if(empty($_SESSION['email'])){
   <link rel="stylesheet" href="./assets/vendor/nucleo/css/nucleo.css" type="text/css">
   <link rel="stylesheet" href="./assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
   <!-- Argon CSS -->
+  <!-- <script src="./assets/vendor/jquery/dist/jquery.min.js"></script> -->
   <link rel="stylesheet" href="./assets/css/argon.css?v=1.2.0" type="text/css">
 </head>
 
@@ -196,7 +192,7 @@ if(empty($_SESSION['email'])){
             <span class="docs-normal">Documentation</span>
           </h6>
           <!-- Navigation -->
-         
+
         </div>
       </div>
     </div>
@@ -465,7 +461,7 @@ if(empty($_SESSION['email'])){
     <!-- Page content -->
     <div class="container-fluid mt--6">
       <div class="row mt--5">
-        <div class="col-md-10 ml-auto mr-auto">
+        <div class="col-md-12 ml-auto mr-auto">
           <div class="card card-upgrade">
             <div class="card-header bg-transparent">
                 <h3 class="mb-0">
@@ -482,58 +478,102 @@ if(empty($_SESSION['email'])){
                 </h3>
             </div>
             <div class="card-body">
+            <?php
+            if(isset($_POST['delete_all_btn'])){
+              $delete_all_values=$_POST['delete_all_values'];
+            
+              $fetch_step_code_and_video=$conn->query("DELETE FROM lesson_step WHERE step_code='$delete_all_values'");
+             if($fetch_step_code_and_video==TRUE){
+              
+             }else{
+              $message=$conn->error;
+             }
+         
+                $fetch_lesson_video_to_delete=$conn->query("SELECT * FROM lesson_vidoes WHERE step_code='$delete_all_values'");
+                if($fetch_lesson_video_to_delete->num_rows!=0){
+                  while($video_row=$fetch_lesson_video_to_delete->fetch_assoc()){
+                    $get_delete_videos_id=$video_row['id'];
+                    $fetch_step_code_video=$conn->query("DELETE FROM lesson_vidoes WHERE id='  $get_delete_videos_id'");
+
+                    if($fetch_step_code_video==TRUE){
+                      $message="Step deleted successful";
+                      unset($_SESSION['step_code']);
+                    }
+                  }
+                }
+               
+              }else{
+                $message=$conn->error;
+              }
+            
+            ?>
+            <?php
+if(isset($_POST['del_lesson'])){
+  $del_value_lesson=$_POST['del_value_lesson'];
+  $select_and_fetch_video_step=$conn->query("DELETE FROM lesson_vidoes WHERE id='$del_value_lesson'");
+  if($select_and_fetch_video_step==TRUE){
+    $message="Lesson video has been deleted.";
+  }else{
+    $message=$conn->error;
+  }
+ 
+}
+?>
+            <?php
+                                           if(isset($_POST['set_new_lesson'])){
+                                            $_SESSION['step_code']= $_POST['set_lesson_step'];
+                                           }
+                                           ?>
               <div class="col-12">
                    <?php
-              if($message==""){
-                  echo "";
-              }
-              else if($message=="File uploaded successful"){
-                  ?>
+if ($message == "") {
+    echo "";
+} else if ($message == "File uploaded successful") {
+    ?>
                    <div class="alert alert-success alert-dismissible fade show">
-  <strong>Success!</strong> <?php echo $message;?>
+  <strong>Success!</strong> <?php echo $message; ?>
 </div>
                   <?php
-              }
-              else{
-                  ?>
+} else {
+    ?>
               <div class="alert alert-danger alert-dismissible fade show">
-  <strong>Error!</strong> <?php echo $message;?>
+  <strong>Error!</strong> <?php echo $message; ?>
 </div>
               <?php
-              
-              }
-              ?>
+
+}
+?>
               </div>
                              <div class=" col-12">
                    <div class="">
-                       
+
                        <form action="" method="post" enctype='multipart/form-data' class="col-12">
-            
-       
-       
+
+
+
            <div class="card" style="border-bottom: 2px solid purple;margin-bottom: 20px">
   <div class="card-body">
                        <div class="row" style="display:flex;justify-content: center">
-                                 
-                           
+
+
                             <div class="col-6">
-                               <label>Lessons steps</label>
+                               <label class="update-label">Lessons steps</label>
                                <div class="row">
                                    <div class="col-12">
                                        <div class="alert alert-danger" id="danger-message" role="alert" style="display: none;">
- 
+
 </div>
                                    </div>
                                   <?php
-                                  
-                                  if(isset($_POST['add_step_btn'])){
-                                        $step_code=rand(45634635,77266359);
-                                       $lesson_input=$_POST['lesson_input'];
-                                       $course_code=$_GET['course_code'];
-                                       $message="";
-                                       
-                                       if(empty( $lesson_input)){
-                                           ?>
+
+if (isset($_POST['add_step_btn'])) {
+    $step_code = rand(45634635, 77266359);
+    $lesson_input = $_POST['lesson_input'];
+    $course_code = $_GET['course_code'];
+    $message = "";
+
+    if (empty($lesson_input)) {
+        ?>
                                     <div class="row">
                                    <div class="col-12">
                                        <div class="alert alert-danger" id="danger-message" role="alert" >
@@ -541,164 +581,198 @@ if(empty($_SESSION['email'])){
 </div>
                                    </div>
                                    <?php
-                                       }else{
-                                           $_SESSION['step_code']= $step_code;
-                                            $insert_lesson_step=$conn->query("INSERT INTO lesson_step(lesson_steps,course_code,step_code) VALUES (' $lesson_input','$course_code','$step_code')");
-         if($insert_lesson_step==TRUE){
-             
-             
-          ?>
+} else {
+        $_SESSION['step_code'] = $step_code;
+        $insert_lesson_step = $conn->query("INSERT INTO lesson_step(lesson_steps,course_code,step_code) VALUES (' $lesson_input','$course_code','$step_code')");
+        if ($insert_lesson_step == true) {
+
+            ?>
                                          <div class="row">
-                                           
+
                                    <div class="col-12">
                                        <div class="alert alert-success" id="danger-message" role="alert" >
                                            New lesson step has been added.
 </div>
-                                     
+
                                    </div>
                                         <?php
-         }else{
-             ?>
+} else {
+            ?>
                                               <div class="row">
                                    <div class="col-12">
                                        <div class="alert alert-danger" id="danger-message" role="alert" >
-                                          <?php echo   $conn->error;?>
+                                          <?php echo $conn->error; ?>
 </div>
                                    </div>
                                              <?php
-                                             
-            
-         }
-                                       }
-                                  }
-                                  ?>
-                                 
+
+        }
+    }
+}
+?>
+
                                         <div class="col-10">
                                             <?php
-                                            
-                                             if(!empty($_SESSION['step_code'])){
-                                         ?>
+
+if (!empty($_SESSION['step_code'])) {
+
+    ?>
                                              <input type="text" name="video_title" placeholder="Video title" class="form-control" id="requirment_input"/>
                                             <input type="file" name="lesson_videos" class="form-control" id="requirment_input" style="margin-top: 20px"/>
-                                           
+
                                               <div class="col-2">
                                        <input type="submit" name="add_vidoes_btn" class="btn btn-success"  value="Add video" style="background: purple;color:white;border:none;padding-top:10px;padding-bottom: 10px;padding-right: 20px;padding-left: 20px;border-radius: 26px;margin-top:10px;">
                                             <?php
-                                      }else{
-                                         ?>
-                                             <input type="text" name="lesson_input" class="form-control" id="requirment_input"/>
+} else {
+
+    ?>
+                                            <div class="lesson_steps">
+                                            <input type="text" name="lesson_input" class="form-control" id="requirment_input"/>
                                               <div class="col-2">
                                        <input type="submit" name="add_step_btn" class="btn btn-success"  value="Add step" style="background: purple;color:white;border:none;padding-top:10px;padding-bottom: 10px;padding-right: 20px;padding-left: 20px;border-radius: 26px;margin-top:10px;">
-                                      
+
                                    </input>
+                                            </div>
                                    </div>
                                             <?php
-                                      }
-                                            ?>
-                                       
+}
+?>
+
                                    </div>
-                                  
-                                  
+
+
                                    <div class="col-12 list-requirement" style="margin-top:10px">
+                                   
                                      <?php
-                                     $course_code=$_GET['course_code'];
-                                     
-                                     $select_steps=$conn->query("SELECT * FROM lesson_step WHERE course_code='$course_code'");
-                                     while($row_steps=$select_steps->fetch_assoc()){
-                                         
-                                         ?>
+                                   
+$course_code = $_GET['course_code'];
+
+$select_steps = $conn->query("SELECT * FROM lesson_step WHERE course_code='$course_code'");
+while ($row_steps = $select_steps->fetch_assoc()) {
+
+    ?>
                                        <div class="col-12" style="margin-bottom: 10px">
                                            <div class="row">
-                                                <h6 class="col-6" style="font-weight: bold;margin-top:20px;width:100%;"> <?php echo $row_steps['lesson_steps']; ?></h6>
-                                                <div class="col-6" style="display: flex;justify-content: flex-end;margin-top:10px;">
-                                                   
+                                                <h4 class="col-8" style="font-weight: bold;margin-top:20px;width:100%;"> <?php echo $row_steps['lesson_steps']; ?></h4>
+                                                <div class="col-4" style="display: flex;justify-content: flex-end;margin-top:10px;">
+                                             
+                                              <!-- <label class="input_step_update">Edit</label> -->
+                                             
+                                              <a href="update_course_step.php?step_code=<?php echo $row_steps['step_code'];?>">
+                                            <span class="badge badge-primary badge-pill" style="padding-top:5px;padding-left: 7px;padding-right: 7px;padding-bottom: 5px;"><i class="fa fa-edit"></i>Edit</span></a>
+                                          <form method="post">
+                                          <div style="display:none">
+                                           <input type="text" value="<?php echo $row_steps['step_code'];?>" name="delete_all_values"/>
+                                           </div>
+                                            <input type="submit" class="btn btn-danger" style="margin-left:15px" value="Del Step" name="delete_all_btn"></input>
+                                          </form>
+                                              
                                                 </div>
+                                              
+                                           </div>
+                                           <div>
+                                          
+                                           <form method="post">
+                                           <div style="display:none;">
+                                           <input type="text" name="set_lesson_step" value="<?php echo $row_steps['step_code']; ?>"/>
+                                           </div>
+                                           <input type="submit" name="set_new_lesson" class="btn btn-success" value="Add new lesson"></input>
+                                           </form>
                                            </div>
                                        </div>
                                       <?php
-                                      $step_codes=$row_steps['step_code'];
-                                       $select_step_videos=$conn->query("SELECT * FROM lesson_vidoes WHERE course_code='$course_code'");
-                                       if($_SESSION['step_code']== $step_codes){
-                                            while($row_videos=$select_step_videos->fetch_assoc()){ 
-                                           if($row_videos['step_code']==$row_steps['step_code']){
-                                             ?>
+$step_codes = $row_steps['step_code'];
+    $select_step_videos = $conn->query("SELECT * FROM lesson_vidoes WHERE course_code='$course_code'");
+    if ($_SESSION['step_code'] == $step_codes) {
+        while ($row_videos = $select_step_videos->fetch_assoc()) {
+            if ($row_videos['step_code'] == $row_steps['step_code']) {
+                ?>
                                         <ul class="list-group">
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                               <?php  echo $row_videos['video_title'];?>
-                                                <a href="update_video_step.php?video_step= <?php  echo $row_videos['id'];?>">
-                                                    <span class="badge badge-primary badge-pill" style="padding-top:5px;padding-left: 7px;padding-right: 7px;padding-bottom: 5px;"><i class="fa fa-edit"></i>Edit</span>
-                                                </a>
+                                               <?php echo $row_videos['video_title']; ?>
+                                               <a href="update_lesson_video.php?lesson_id=<?php echo $row_videos['id'];?>">
+                                               <span class="badge badge-primary badge-pill" style="padding-top:5px;padding-left: 7px;padding-right: 7px;padding-bottom: 5px;"><i class="fa fa-edit"></i>Edit</span></a>
+                                               <form method="post">
+                                               <div style="display:none">
+                                               <input type="text" value="<?php echo $row_videos['id'] ?>" name="del_value_lesson"/>
+                                               </div>
+                                               <input type="submit" class="btn btn-danger" value="Del" name="del_lesson"></input>
+                                               </form>
                                             </li>
                                               </ul>
                                        <?php
-                                       
-                                                
-                                           }else{
-                                                echo "";
-                                           }
-                                          
-                                       }
-                                       ?>
+
+            } else {
+                echo "";
+            }
+
+        }
+        ?>
                                        <input type="submit" value="Start a new step" name="start_new_step" class="btn btn-primary"style="padding-left: 40px;padding-right: 40px;border-radius: 26px;padding-top:10px;padding-bottom: 10px;margin-top:20px"></input>
                                        <?php
-                                       }else{
-                                            while($row_videos=$select_step_videos->fetch_assoc()){
-                                           
-                                           
-                                           if($row_videos['step_code']==$row_steps['step_code']){
-                                              ?>
+} else {
+        while ($row_videos = $select_step_videos->fetch_assoc()) {
+
+            if ($row_videos['step_code'] == $row_steps['step_code']) {
+                ?>
                                         <ul class="list-group">
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                               <?php  echo $row_videos['video_title'];?>
-                                                 <a href="update_video_step.php?video_step= <?php  echo $row_videos['id'];?>">
+                                               <?php echo $row_videos['video_title']; ?>
+                                                <a href="update_lesson_video.php?lesson_id=<?php echo $row_videos['id'];?>">
                                                      <span class="badge badge-primary badge-pill" style="padding-top:5px;padding-left: 7px;padding-right: 7px;padding-bottom: 5px;"><i class="fa fa-edit"></i>Edit</span></a>
+                                                     <form method="post">
+                                                     <div style="display:none">
+                                               <input type="text" value="<?php echo $row_videos['id'] ?>" name="del_value_lesson"/>
+                                               </div>
+                                               <input type="submit" class="btn btn-danger" value="Del" name="del_lesson"></input>
+                                               </form>
                                             </li>
                                               </ul>
                                        <?php
-                                               
-                                                
-                                           }else{
-                                                echo "";
-                                           }
-                                          
-                                       }
-                                       }
-                                      
-                                      ?>
+
+            } else {
+                echo "";
+            }
+
+        }
+    }
+
+    ?>
                                        <?php
-                                     }
-                                     ?>
-                                       
-                                     
+}
+?>
+
+
+
                                    </div>
                                </div>
                            </div>
                                          <div class="col-12">
-           
-                                              <label></label>  
-                                            
+
+                                              <label></label>
+
                                </div>
-                                         
+
                                     </div>
-                                  
+
                                         <!--start outcomes-->
-                                        
-                                         
+
+
         </div>
-                               
+
               </div>
                                </div>
                             </div>
-                           
-                        
-                    
+
+
+
                        </div>
   </div>
 </div>
    <!--stop all forms -->
-                       
-                       
-                      
+
+
+
         <!-- /.container-fluid -->
                          </form>
       </div>
@@ -737,6 +811,7 @@ if(empty($_SESSION['email'])){
   <!-- Argon Scripts -->
   <!-- Core -->
   <script src="./assets/vendor/jquery/dist/jquery.min.js"></script>
+
   <script src="./assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="./assets/vendor/js-cookie/js.cookie.js"></script>
   <script src="./assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>

@@ -21,8 +21,8 @@ if(empty($_SESSION['email'])){
       header("location:"."/mozilearn/admin/login.php");
 }else{
     if(isset($_POST['submit'])){
-        $instructor_firstname=mysqli_real_escape_string($conn,$_POST['instructor_name']);
-         $instructor_lastname=mysqli_real_escape_string($conn,$_POST['instructor_lname']); 
+        // $instructor_firstname=mysqli_real_escape_string($conn,$_POST['instructor_name']);
+        //  $instructor_lastname=mysqli_real_escape_string($conn,$_POST['instructor_lname']); 
            $image = $_FILES['image']['name'];
            $facebook=mysqli_real_escape_string($conn,$_POST['facebook_link']);
             $twitter=mysqli_real_escape_string($conn,$_POST['twitter_link']);
@@ -30,9 +30,9 @@ if(empty($_SESSION['email'])){
               $email=mysqli_real_escape_string($conn,$_POST['email']);
                $password=mysqli_real_escape_string($conn,$_POST['password']);
                 $bios=mysqli_real_escape_string($conn,$_POST['bios']);
-              $full_name=mysqli_real_escape_string($conn,$instructor_firstname." ".$instructor_lastname);
+              $full_name=mysqli_real_escape_string($conn,$_POST['instructor_name']);
                 $target = "instructors_image/".basename($image);
-               $insert_instructor=$conn->query("INSERT INTO instructors(instructor_firstname,instructor_lastname,instructor_image,facebook,twitter,linkedin,email,password,bios,full_name)VALUES('$instructor_firstname','$instructor_lastname','$image','$facebook','$twitter','$linkedin','$email','$password','$bios','$full_name')");
+               $insert_instructor=$conn->query("INSERT INTO instructors(instructor_image,facebook,twitter,linkedin,email,password,bios,full_name)VALUES('$image','$facebook','$twitter','$linkedin','$email','$password','$bios','$full_name')");
                if($insert_instructor==TRUE){
                     if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
   		$msg = "New instructor successfully";
@@ -476,15 +476,12 @@ if(empty($_SESSION['email'])){
                 <div class="card col-12 "style="border-bottom: 2px solid #9A4EAE;">
   <div class="card-body">
       <div class="row">
-          <div class="col-4">
-              <label>Instructor first name</label>
+          <div class="col-6">
+              <label>Instructor full name</label>
               <input type="text" name="instructor_name" class="form-control" required/>
       </div>
-           <div class="col-4">
-           <label>Instructor last name</label>
-              <input type="text" name="instructor_lname" class="form-control" required/>
-      </div>
-           <div class="col-4">
+          
+           <div class="col-6">
           <label>Instructor image</label>
           <input type="file" name="image" class="form-control" required/>
       </div>

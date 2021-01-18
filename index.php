@@ -16,8 +16,7 @@ if (isset($_POST['logout'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-	
-<!-- Mirrored from codeminifier.com/learnup-1.1/learnup/home-9.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Oct 2020 13:55:55 GMT -->
+
 <head>
 		<meta charset="utf-8" />
 		<meta name="author" content="www.frebsite.nl" />
@@ -54,8 +53,8 @@ if (isset($_POST['logout'])) {
 				<div class="container">
 					<nav id="navigation" class="navigation navigation-landscape">
 						<div class="nav-header">
-							<a class="nav-brand static-logo" href="#"><img src="assets/img/mozisha-logo.png" class="logo" alt="" /></a>
-							<a class="nav-brand fixed-logo" href="#"><img src="assets/img/mozisha-logo.png" class="logo" alt="" /></a>
+							<a class="nav-brand static-logo" href="index.php"><img src="assets/img/mozisha-logo.png" class="logo" alt="" /></a>
+							<a class="nav-brand fixed-logo" href="index.php"><img src="assets/img/logo-black.png" class="logo" alt="" /></a>
 
 							<div class="nav-toggle"></div>
 						</div>
@@ -756,7 +755,7 @@ if (isset($_POST['logout'])) {
 			<!-- ========================== Articles Section =============================== -->
 			
 			<!-- ========================== Brand Section =============================== -->
-			<section>
+			<!-- <section>
 				<div class="container">
 					
 					<div class="row justify-content-center">
@@ -770,40 +769,40 @@ if (isset($_POST['logout'])) {
 				
 					<div class="row">
 						<div class="col-lg-12 col-md-12">
-							<div class="single_brand" id="brand-slide">
+							<div class="single_brand" id="brand-slide"> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-1.png" class="img-fluid" alt="" />
-								</div>
+								</div> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-2.png" class="img-fluid" alt="" />
-								</div>
+								</div> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-3.png" class="img-fluid" alt="" />
-								</div>
+								</div> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-4.png" class="img-fluid" alt="" />
-								</div>
+								</div> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-5.png" class="img-fluid" alt="" />
-								</div>
+								</div> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-6.png" class="img-fluid" alt="" />
-								</div>
+								</div> -->
 								
 								<!-- single -->
-								<div class="single_brands">
+								<!-- <div class="single_brands">
 									<img src="assets/img/brand-7.png" class="img-fluid" alt="" />
 								</div>
 								
@@ -811,7 +810,7 @@ if (isset($_POST['logout'])) {
 						</div>
 					</div>
 				</div>
-			</section>
+			</section> -->
 			<!-- ========================== Brand Section =============================== -->
 			
 			<!-- ============================== Start Newsletter ================================== -->
@@ -1060,5 +1059,4 @@ if (isset($_POST['logout'])) {
 
 	</body>
 
-<!-- Mirrored from codeminifier.com/learnup-1.1/learnup/home-9.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Oct 2020 13:56:27 GMT -->
 </html>

@@ -889,7 +889,7 @@ $target_image = "category_images/".basename($image);
         $get_instructor=$conn->query("SELECT * FROM instructors");
         while($row=$get_instructor->fetch_assoc()){
             ?>
-         <option><?php echo $row['instructor_firstname']." ".$row['instructor_lastname']; ?></option>
+         <option><?php echo $row['full_name']; ?></option>
         <?php
         }
         ?>
